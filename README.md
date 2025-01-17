@@ -41,7 +41,7 @@ This repo provides the high-level steps to create a RAG-based, Gen AI travel ass
 > ### NOTE - Because this is the first code block that is being executed, it may take up to 60 seconds for the runtime environment to be allocated before the code is executed.  This is a one-time initialization and won’t be required in subsequent steps.
 
 ### **BigQuery Config - Code Block 1**
-```
+```python
 #@title BigQuery Config - Code Block 1: Set Project Id Environment Variable
 #Replace <Your Project ID> with your own Project Id
 
@@ -55,7 +55,7 @@ This repo provides the high-level steps to create a RAG-based, Gen AI travel ass
 
 A Google Cloud Resource Connection is a connection to authorize access to other Google Cloud resources from within BigQuery.  For our lab, we will be using this connection in future steps to access Vertex AI.
 
-```
+```python
 #@title BigQuery Config - Code Block 2: Create Cloud Resource Connection
 
 !bq mk \
@@ -74,7 +74,7 @@ When the Cloud Resource Connection was created in the previous step, a Service A
 
 To access the details for the connection that you just created, create a new Code Block and paste in the following code. Execute the code block.
 
-```
+```python
 #@title BigQuery Config - Code Block 3: Retrieve Details for the new Cloud Resource Connection
 
 !bq show \
@@ -88,7 +88,7 @@ To access the details for the connection that you just created, create a new Cod
 
 Using the Service Account Email from the previous step, assign the aiplatform.user role to the Service Account.  This allows the Service Account to access Vertex AI services.
 
-```
+```python
 #@title BigQuery Config - Code Block 4: Give Service Account Permissions for Vertex AI
 # Replace <Service Account Email From The Previous Step> with your Service Account Id
 
@@ -104,7 +104,7 @@ Using the Service Account Email from the previous step, assign the aiplatform.us
 
 Create a new dataset in your BigQuery project.  We will use this dataset in future steps for storing new database objects that we will be creating.
 
-```
+```python
 #@title BigQuery Config - Code Block 5: Create BigQuery Dataset for storing new database objects
 
 !bq --location=US mk --dataset \
@@ -120,7 +120,7 @@ Create another new model in the dataset that you created previously. We’ll be 
 
 We will be using this model for creating the vector embeddings for our data, which will be used by our Travel Assistant for Semantic Search.
 
-```
+```sql
 #@title BigQuery Config - Code Block 6: Create Remote Model for interacting with a Text Embedding Model
 
 %%bigquery
@@ -137,7 +137,7 @@ Now, we will create a new table in the dataset you created in one of the earlier
 
 > ### NOTE - For this step, you will need to replace <your Fivetran dataset name> with the name of the dataset that you specified. Because this query concatenates the data in each row into a single string per row and then converts that data into its vector representation for all 700+ rows in our table, this query can take about a minute to run.
 
-```
+```sql
 #@title BigQuery Config - Code Block 7: Append Winery Details and Create Search Embeddings
 #Replace <Your Fivetran Dataset Name> with the name of the dataset that you specified
 #when setting up your BigQuery destination in Fivetran
@@ -205,7 +205,7 @@ FROM ML.GENERATE_TEXT_EMBEDDING(
 
 Now, let's check out the output of those LLM transformations.
 
-```
+```sql
 #@title BigQuery Config - Code Block 8: Run this select statement to generate output of the LLM transformations for a single record
 %%bigquery
 
@@ -254,7 +254,7 @@ https://kohlleffelvineyards.com. Price Range: medium range. Tasting Room Hours:
 
 This Code Block will install the Gradio software and the IPython interpreter.  
 
-```
+```python
 #@title Wine Country App - Code Block 1: Dependency installation
 
 #Install the Open source Python Framework that will be used to create the
@@ -275,7 +275,7 @@ This code will restart the environment so that future code blocks will be able t
 <br/> Your session crashed for an unknown reason. View runtime logs.
 <br/> Note - you can safely close this error message and continue.
 
-```
+```python
 #@title Wine Country App - Code Block 2: Restart the application
 
 #Automatically restart kernel after installs so that your environment can access the new packages
@@ -289,7 +289,7 @@ app.kernel.do_shutdown(True)
 
 This code block loads all of the Python Modules that will be required by our application.  
 
-```
+```python
 #@title Wine Country App - Code Block 3: Import modules
 
 #Import all of the Python modules that will be used in our application
@@ -317,7 +317,7 @@ from IPython.display import display, Markdown, Latex
 
 > **Update the PROJECT ID:** Your Project ID
 
-```
+```python
 #@title Wine Country App - Code Block 4: Parameters
 #Configurable parameters that can be set specifically for your application
 
@@ -349,7 +349,7 @@ google_auth.authenticate_user()
 
 This Code Block defines all of the utility functions used for executing queries interactively and via the user interface.  The interactions between the application, BigQuery, and Gemini are defined here.
 
-```
+```python
 #@title Wine Country App - Code Block 5: Functions
 
 #Creates embeddings via the embedding model, executes the query and returns
@@ -507,7 +507,7 @@ def ask_question_with_params(prompt, model, history,use_bq, use_gs):
 
 This Code Block sets our system prompt, which explains to the LLM what we are trying to accomplish and some guidelines to use when formulating responses.  Send this prompt to the LLM to initialize it, which must be done before sending the first query.
 
-```
+```python
 #@title Wine Country App - Code Block 6: Model Initialization
 
 #Initialize the model with the system instructions
@@ -569,7 +569,7 @@ Here's what makes them special:
 
 * Winery Experience: Sandell Estates offers a unique blend of relaxation and adventure. Imagine sipping award-winning Sauvignon Blanc or Pinot Noir in a lakeside lounge chair, then kayaking or trying their thrilling rope swings over Lake Berryessa.
 
-```
+```python
 #@title Wine Country App - Code Block 8: Test BigQuery Interaction
 
 query = "Tell me everything you know about Sandell Estates"
@@ -582,7 +582,7 @@ print(answer)
 
 Unlike the other code blocks that we have run, this block continues to run for as long as you want to interact with the Travel Assistant.  Once the User Interface starts, the Play Button changes to a Stop button, which you can press whenever you are done interacting with the Travel Assistant.
 
-```
+```python
 #@title Wine Country App - Code Block 9: Gradio App
 import gradio as gr
 
